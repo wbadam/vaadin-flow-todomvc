@@ -17,7 +17,6 @@ package com.vaadin.flow.demo.helloworld;
 
 import com.vaadin.annotations.StyleSheet;
 import com.vaadin.flow.html.Div;
-import com.vaadin.flow.html.Label;
 import com.vaadin.flow.router.View;
 import com.vaadin.ui.Composite;
 
@@ -25,15 +24,12 @@ import com.vaadin.ui.Composite;
  * The main view contains a simple label element and a template element.
  */
 @StyleSheet("context://styles.css")
+@StyleSheet("frontend://bower_components/todomvc-app-css/index.css")
+@StyleSheet("frontend://bower_components/todomvc-common/base.css")
 public class MainView extends Composite<Div> implements View {
 
     public MainView() {
-        // This is just a simple label created via Elements API
-        Label label = new Label("Hello");
-        getContent().add(label);
-        // This is a simple template example
-        ExampleTemplate template = new ExampleTemplate();
-        getContent().add(template);
+        getContent().add(new TodoApp());
     }
 
 }

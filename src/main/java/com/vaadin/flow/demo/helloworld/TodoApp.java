@@ -5,9 +5,11 @@ import com.vaadin.flow.html.HtmlContainer;
 import com.vaadin.flow.router.View;
 
 @Tag("section")
-public class TodoView extends HtmlContainer implements View {
+public class TodoApp extends HtmlContainer implements View {
 
-    public TodoView() {
+    public TodoApp() {
         setClassName("todoapp");
+
+        add(new Header());
     }
 }
