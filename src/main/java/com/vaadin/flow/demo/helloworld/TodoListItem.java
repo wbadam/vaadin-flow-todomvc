@@ -11,6 +11,7 @@ import com.vaadin.flow.html.NativeButton;
 public class TodoListItem extends HtmlContainer {
 
     private static String STYLE_NAME_COMPLETED = "completed";
+    private static String STYLE_NAME_EDITING = "editing";
 
     public static class ListItemView extends Div {
 
