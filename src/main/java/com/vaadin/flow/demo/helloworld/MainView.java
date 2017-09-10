@@ -20,10 +20,6 @@ import com.vaadin.flow.html.Div;
 import com.vaadin.flow.router.View;
 import com.vaadin.ui.Composite;
 
-/**
- * The main view contains a simple label element and a template element.
- */
-@StyleSheet("context://styles.css")
 @StyleSheet("frontend://bower_components/todomvc-app-css/index.css")
 @StyleSheet("frontend://bower_components/todomvc-common/base.css")
 public class MainView extends Composite<Div> implements View {

@@ -1,7 +1,6 @@
 package com.vaadin.flow.demo.helloworld;
 
 import com.vaadin.annotations.HtmlImport;
-import com.vaadin.annotations.StyleSheet;
 import com.vaadin.annotations.Tag;
 import com.vaadin.flow.demo.helloworld.Main.SectionMainModel;
 import com.vaadin.flow.template.PolymerTemplate;
