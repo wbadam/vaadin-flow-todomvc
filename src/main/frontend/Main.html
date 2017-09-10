@@ -1,0 +1,18 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<dom-module id="section-main">
+    <template>
+        <input id="toggle-all" class="toggle-all" type="checkbox">
+        <label for="toggle-all">Mark all as complete</label>
+    </template>
+
+    <!-- Polymer boilerplate to register the example-template element -->
+    <script>
+        class SectionMain extends Polymer.Element {
+            static get is() {
+                return 'section-main'
+            }
+        }
+        customElements.define(SectionMain.is, SectionMain);
+    </script>
+</dom-module>

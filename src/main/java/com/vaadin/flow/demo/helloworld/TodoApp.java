@@ -11,5 +11,6 @@ public class TodoApp extends HtmlContainer implements View {
         setClassName("todoapp");
 
         add(new Header());
+        add(new Main());
     }
 }
