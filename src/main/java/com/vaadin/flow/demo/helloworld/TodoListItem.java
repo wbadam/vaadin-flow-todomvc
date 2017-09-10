@@ -1,7 +1,7 @@
 package com.vaadin.flow.demo.helloworld;
 
 import com.vaadin.annotations.Tag;
-import com.vaadin.flow.demo.helloworld.beans.TodoItem;
+import com.vaadin.flow.demo.helloworld.beans.Todo;
 import com.vaadin.flow.html.Div;
 import com.vaadin.flow.html.HtmlContainer;
 import com.vaadin.flow.html.Input;
@@ -38,9 +38,9 @@ public class TodoListItem extends HtmlContainer {
     }
 
     private Input edit;
-    private TodoItem todo;
+    private Todo todo;
 
-    public TodoListItem(TodoItem todo) {
+    public TodoListItem(Todo todo) {
         this.todo = todo;
 
         ListItemView view = new ListItemView(todo.getText());

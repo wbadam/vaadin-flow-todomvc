@@ -1,8 +1,12 @@
 package com.vaadin.flow.demo.helloworld.beans;
 
-public class TodoItem {
+public class Todo {
     private String text;
     private boolean completed;
+
+    public Todo(String text) {
+        this.text = text;
+    }
 
     public String getText() {
         return text;
