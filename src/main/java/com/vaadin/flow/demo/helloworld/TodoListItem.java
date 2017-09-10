@@ -1,6 +1,7 @@
 package com.vaadin.flow.demo.helloworld;
 
 import com.vaadin.annotations.Tag;
+import com.vaadin.flow.demo.helloworld.beans.TodoItem;
 import com.vaadin.flow.html.Div;
 import com.vaadin.flow.html.HtmlContainer;
 import com.vaadin.flow.html.Input;
@@ -19,7 +20,7 @@ public class TodoListItem extends HtmlContainer {
         private Label label;
         private NativeButton destroy;
 
-        public ListItemView() {
+        public ListItemView(String text) {
             addClassName("view");
 
             toggle = new Input();
@@ -27,7 +28,7 @@ public class TodoListItem extends HtmlContainer {
             toggle.addClassName("toggle");
             add(toggle);
 
-            label = new Label();
+            label = new Label(text);
             add(label);
 
             destroy = new NativeButton();
@@ -37,10 +38,17 @@ public class TodoListItem extends HtmlContainer {
     }
 
     private Input edit;
+    private TodoItem todo;
 
-    public TodoListItem() {
-        ListItemView view = new ListItemView();
+    public TodoListItem(TodoItem todo) {
+        this.todo = todo;
+
+        ListItemView view = new ListItemView(todo.getText());
         add(view);
+
+        if (todo.isCompleted()) {
+            setClassName(STYLE_NAME_COMPLETED);
+        }
 
         edit = new Input();
         edit.addClassName("edit");
