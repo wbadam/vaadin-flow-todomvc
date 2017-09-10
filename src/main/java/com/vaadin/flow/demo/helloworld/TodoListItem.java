@@ -14,7 +14,7 @@ public class TodoListItem extends HtmlContainer {
     private static String STYLE_NAME_COMPLETED = "completed";
     private static String STYLE_NAME_EDITING = "editing";
 
-    public static class ListItemView extends Div {
+    private static class ListItemView extends Div {
 
         private Input toggle;
         private Label label;
@@ -26,6 +26,9 @@ public class TodoListItem extends HtmlContainer {
             toggle = new Input();
             toggle.setType("checkbox");
             toggle.addClassName("toggle");
+            toggle.addChangeListener(event -> {
+                ((TodoListItem) getParent().get()).toggleCompleted();
+            });
             add(toggle);
 
             label = new Label(text);
@@ -46,12 +49,23 @@ public class TodoListItem extends HtmlContainer {
         ListItemView view = new ListItemView(todo.getText());
         add(view);
 
-        if (todo.isCompleted()) {
-            setClassName(STYLE_NAME_COMPLETED);
-        }
+        updateStyleName();
 
         edit = new Input();
         edit.addClassName("edit");
         add(edit);
+    }
+
+    private void toggleCompleted() {
+        todo.setCompleted(!todo.isCompleted());
+        updateStyleName();
+    }
+
+    private void updateStyleName() {
+        if (todo.isCompleted()) {
+            addClassName(STYLE_NAME_COMPLETED);
+        } else {
+            removeClassName(STYLE_NAME_COMPLETED);
+        }
     }
 }
