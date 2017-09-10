@@ -1,7 +1,5 @@
 package com.vaadin.flow.demo.helloworld;
 
-import java.util.Arrays;
-
 import com.vaadin.annotations.Tag;
 import com.vaadin.flow.html.HtmlContainer;
 import com.vaadin.flow.html.Input;
@@ -15,6 +13,8 @@ public class MainSection extends HtmlContainer {
     public MainSection() {
         addClassName("main");
 
+        setVisible(false);
+
         toggleAll = new Input();
         toggleAll.setType("checkbox");
         toggleAll.setClassName("toggle-all");
@@ -25,5 +25,13 @@ public class MainSection extends HtmlContainer {
         add(toggleAll, toggleAllLabel);
 
 //        add(new TodoList(Arrays.asList(new TodoListItem())));
+    }
+
+    public void setVisible(boolean visible) {
+        if (visible) {
+            getElement().getStyle().remove("display");
+        } else {
+            getElement().getStyle().set("display", "none");
+        }
     }
 }
