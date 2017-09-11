@@ -31,6 +31,7 @@ public class TodoApp extends HtmlContainer implements View{
 
         // Register event handler
         todoModel.getEventBus().register(this);
+        todoModel.getEventBus().register(mainSection);
 
         add(header, mainSection);
     }
