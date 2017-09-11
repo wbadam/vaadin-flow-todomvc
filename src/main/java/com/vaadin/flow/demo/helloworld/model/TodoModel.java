@@ -25,6 +25,10 @@ public class TodoModel {
         dataHandler.add(todo);
     }
 
+    public void markAllAsComplete(boolean complete) {
+        todos.forEach(todo -> todo.setCompleted(complete));
+    }
+
     public EventBus getEventBus() {
         return eventBus;
     }

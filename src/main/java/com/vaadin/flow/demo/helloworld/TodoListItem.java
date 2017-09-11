@@ -2,6 +2,7 @@ package com.vaadin.flow.demo.helloworld;
 
 import com.vaadin.annotations.Tag;
 import com.vaadin.flow.demo.helloworld.beans.Todo;
+import com.vaadin.flow.demo.helloworld.components.NativeCheckbox;
 import com.vaadin.flow.html.Div;
 import com.vaadin.flow.html.HtmlContainer;
 import com.vaadin.flow.html.Input;
@@ -16,16 +17,17 @@ public class TodoListItem extends HtmlContainer {
 
     private static class ListItemView extends Div {
 
-        private Input toggle;
+        private NativeCheckbox toggle;
         private Label label;
         private NativeButton destroy;
 
-        public ListItemView(String text) {
+        public ListItemView(String text, boolean completed) {
             addClassName("view");
 
-            toggle = new Input();
+            toggle = new NativeCheckbox();
             toggle.setType("checkbox");
             toggle.addClassName("toggle");
+            toggle.setChecked(completed);
             toggle.addChangeListener(event -> {
                 ((TodoListItem) getParent().get()).toggleCompleted();
             });
@@ -46,7 +48,8 @@ public class TodoListItem extends HtmlContainer {
     public TodoListItem(Todo todo) {
         this.todo = todo;
 
-        ListItemView view = new ListItemView(todo.getText());
+        ListItemView view = new ListItemView(todo.getText(),
+                todo.isCompleted());
         add(view);
 
         updateStyleName();

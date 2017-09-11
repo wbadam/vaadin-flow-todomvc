@@ -3,6 +3,7 @@ package com.vaadin.flow.demo.helloworld;
 import com.google.common.eventbus.Subscribe;
 import com.vaadin.annotations.Tag;
 import com.vaadin.flow.demo.helloworld.events.AddTodoEvent;
+import com.vaadin.flow.demo.helloworld.events.MarkAllAsCompleteToggledEvent;
 import com.vaadin.flow.demo.helloworld.model.TodoModel;
 import com.vaadin.flow.html.HtmlContainer;
 import com.vaadin.flow.router.View;
@@ -26,6 +27,7 @@ public class TodoApp extends HtmlContainer implements View{
 
         mainSection = new MainSection(todoModel.getTodos());
         mainSection.setVisible(false);
+        mainSection.setEventBus(todoModel.getEventBus());
 
         // Register event handler
         todoModel.getEventBus().register(this);
@@ -38,5 +40,11 @@ public class TodoApp extends HtmlContainer implements View{
         todoModel.addTodo(event.getTodo());
         mainSection.refreshTodoList(todoModel.getTodos());
         mainSection.setVisible(true);
+    }
+
+    @Subscribe
+    public void changeAllCompleted(MarkAllAsCompleteToggledEvent event) {
+        todoModel.markAllAsComplete(event.isSelected());
+        mainSection.refreshTodoList(todoModel.getTodos());
     }
 }
