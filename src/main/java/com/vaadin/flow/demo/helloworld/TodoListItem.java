@@ -49,6 +49,7 @@ public class TodoListItem extends HtmlContainer {
 
             destroy = new NativeButton();
             destroy.addClassName("destroy");
+            destroy.addClickListener(event -> getListItem().destroyTodo());
             add(destroy);
         }
 
@@ -85,7 +86,7 @@ public class TodoListItem extends HtmlContainer {
                     disableEditing();
                     eventBus.post(new TodoEditedEvent());
                 } else {
-                    eventBus.post(new TodoDestroyedEvent(todo));
+                    destroyTodo();
                 }
             }
         });
@@ -133,6 +134,10 @@ public class TodoListItem extends HtmlContainer {
         } else {
             removeClassName(STYLE_NAME_COMPLETED);
         }
+    }
+
+    private void destroyTodo() {
+        eventBus.post(new TodoDestroyedEvent(todo));
     }
 
     public void setEventBus(EventBus eventBus) {
