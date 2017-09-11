@@ -1,8 +1,10 @@
 package com.vaadin.flow.demo.helloworld;
 
+import com.google.common.eventbus.EventBus;
 import com.vaadin.annotations.Tag;
 import com.vaadin.flow.demo.helloworld.beans.Todo;
 import com.vaadin.flow.demo.helloworld.components.NativeCheckbox;
+import com.vaadin.flow.demo.helloworld.events.TodoCompletedChangedEvent;
 import com.vaadin.flow.html.Div;
 import com.vaadin.flow.html.HtmlContainer;
 import com.vaadin.flow.html.Input;
@@ -14,6 +16,8 @@ public class TodoListItem extends HtmlContainer {
 
     private static String STYLE_NAME_COMPLETED = "completed";
     private static String STYLE_NAME_EDITING = "editing";
+
+    private EventBus eventBus;
 
     private static class ListItemView extends Div {
 
@@ -62,6 +66,8 @@ public class TodoListItem extends HtmlContainer {
     private void toggleCompleted() {
         todo.setCompleted(!todo.isCompleted());
         updateStyleName();
+
+        eventBus.post(new TodoCompletedChangedEvent(todo));
     }
 
     private void updateStyleName() {
@@ -70,5 +76,9 @@ public class TodoListItem extends HtmlContainer {
         } else {
             removeClassName(STYLE_NAME_COMPLETED);
         }
+    }
+
+    public void setEventBus(EventBus eventBus) {
+        this.eventBus = eventBus;
     }
 }

@@ -25,7 +25,7 @@ public class TodoApp extends HtmlContainer implements View{
         header = new Header();
         header.setEventBus(todoModel.getEventBus());
 
-        mainSection = new MainSection(todoModel.getTodos());
+        mainSection = new MainSection(todoModel);
         mainSection.setVisible(false);
         mainSection.setEventBus(todoModel.getEventBus());
 
@@ -39,13 +39,13 @@ public class TodoApp extends HtmlContainer implements View{
     @Subscribe
     public void addTodo(AddTodoEvent event) {
         todoModel.addTodo(event.getTodo());
-        mainSection.refreshTodoList(todoModel.getTodos());
+        mainSection.refreshTodoList();
         mainSection.setVisible(true);
     }
 
     @Subscribe
     public void changeAllCompleted(MarkAllAsCompleteToggledEvent event) {
         todoModel.markAllAsComplete(event.isSelected());
-        mainSection.refreshTodoList(todoModel.getTodos());
+        mainSection.refreshTodoList();
     }
 }
