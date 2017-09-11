@@ -16,7 +16,7 @@ public class TodoApp extends HtmlContainer implements View{
 
     private final Header header;
     private final MainSection mainSection;
-//    private final Footer footer; TODO
+    private final Footer footer;
 
     public TodoApp() {
         setClassName("todoapp");
@@ -30,11 +30,14 @@ public class TodoApp extends HtmlContainer implements View{
         mainSection.setVisible(false);
         mainSection.setEventBus(todoModel.getEventBus());
 
+        footer = new Footer(todoModel);
+
         // Register event handler
         todoModel.getEventBus().register(this);
         todoModel.getEventBus().register(mainSection);
+        todoModel.getEventBus().register(footer);
 
-        add(header, mainSection);
+        add(header, mainSection, footer);
     }
 
     @Subscribe
