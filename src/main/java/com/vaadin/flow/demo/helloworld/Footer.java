@@ -1,9 +1,12 @@
 package com.vaadin.flow.demo.helloworld;
 
+import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.vaadin.annotations.Tag;
+import com.vaadin.flow.demo.helloworld.beans.Todo;
 import com.vaadin.flow.demo.helloworld.components.StyleUtil;
 import com.vaadin.flow.demo.helloworld.events.AddTodoEvent;
+import com.vaadin.flow.demo.helloworld.events.ClearCompletedEvent;
 import com.vaadin.flow.demo.helloworld.events.MarkAllAsCompleteToggledEvent;
 import com.vaadin.flow.demo.helloworld.events.TodoCompletedChangedEvent;
 import com.vaadin.flow.demo.helloworld.events.TodoDestroyedEvent;
@@ -46,6 +49,7 @@ public class Footer extends HtmlContainer implements View {
     }
 
     private TodoModel todoModel;
+    private EventBus eventBus;
 
     private TodoCount todoCount;
     private NativeButton clearCompleted;
@@ -56,13 +60,15 @@ public class Footer extends HtmlContainer implements View {
         this.todoModel = todoModel;
 
         todoCount = new TodoCount();
-        updateTodoCount();
 
         clearCompleted = new NativeButton("Clear completed");
         clearCompleted.setClassName("clear-completed");
         clearCompleted.addClickListener(event -> {
-
+            eventBus.post(new ClearCompletedEvent());
+            updateTodoCount();
         });
+
+        updateTodoCount();
 
         add(todoCount, clearCompleted);
     }
@@ -70,11 +76,18 @@ public class Footer extends HtmlContainer implements View {
     private void updateTodoCount() {
         todoCount.setCount(getActiveTodoCount());
         StyleUtil.setVisible(this, todoModel.getTodos().size() > 0);
+
+        StyleUtil.setVisible(clearCompleted, getCompletedTodoCount() > 0);
     }
 
     private int getActiveTodoCount() {
         return (int) todoModel.getTodos().stream()
                 .filter(todo -> !todo.isCompleted()).count();
+    }
+
+    private int getCompletedTodoCount() {
+        return (int) todoModel.getTodos().stream().filter(Todo::isCompleted)
+                .count();
     }
 
     @Subscribe
@@ -95,5 +108,9 @@ public class Footer extends HtmlContainer implements View {
     @Subscribe
     public void markAllCompleteChanged(MarkAllAsCompleteToggledEvent event) {
         updateTodoCount();
+    }
+
+    public void setEventBus(EventBus eventBus) {
+        this.eventBus = eventBus;
     }
 }

@@ -1,6 +1,8 @@
 package com.vaadin.flow.demo.helloworld.model;
 
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import com.google.common.eventbus.EventBus;
 import com.vaadin.flow.demo.helloworld.beans.Todo;
@@ -27,6 +29,11 @@ public class TodoModel {
 
     public void removeTodo(Todo todo) {
         dataHandler.remove(todo);
+    }
+
+    public void removeIf(Predicate<Todo> filter) {
+        dataHandler.removeAll(
+                todos.stream().filter(filter).collect(Collectors.toList()));
     }
 
     public void markAllAsComplete(boolean complete) {
