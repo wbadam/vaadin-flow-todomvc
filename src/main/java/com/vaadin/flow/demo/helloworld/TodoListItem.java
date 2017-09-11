@@ -19,6 +19,8 @@ public class TodoListItem extends HtmlContainer {
     private static String STYLE_NAME_COMPLETED = "completed";
     private static String STYLE_NAME_EDITING = "editing";
 
+    private static int KEY_ESC = 27;
+
     private EventBus eventBus;
 
     private static class ListItemView extends Div {
@@ -75,16 +77,24 @@ public class TodoListItem extends HtmlContainer {
         edit = new Input();
         edit.addClassName("edit");
         edit.addChangeListener(event -> {
-            String value = edit.getValue();
-            if (value != null && value.trim().length() > 0) {
-                todo.setText(value.trim());
-                view.setText(todo.getText());
-                disableEditing();
-                eventBus.post(new TodoEditedEvent());
-            } else {
-                eventBus.post(new TodoDestroyedEvent(todo));
+            if (isEditing()) {
+                String value = edit.getValue();
+                if (value != null && value.trim().length() > 0) {
+                    todo.setText(value.trim());
+                    view.setText(todo.getText());
+                    disableEditing();
+                    eventBus.post(new TodoEditedEvent());
+                } else {
+                    eventBus.post(new TodoDestroyedEvent(todo));
+                }
             }
         });
+        edit.getElement().addEventListener("keydown", event -> {
+            // If escape was pressed, close editor
+            if (event.getEventData().getNumber("event.keyCode") == KEY_ESC) {
+                disableEditing();
+            }
+        }, "event.keyCode");
         add(edit);
     }
 
@@ -111,6 +121,10 @@ public class TodoListItem extends HtmlContainer {
         } else {
             removeClassName(STYLE_NAME_EDITING);
         }
+    }
+
+    private boolean isEditing() {
+        return hasClassName(STYLE_NAME_EDITING);
     }
 
     private void updateStyleName() {
