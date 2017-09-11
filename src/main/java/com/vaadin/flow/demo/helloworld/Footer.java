@@ -2,6 +2,7 @@ package com.vaadin.flow.demo.helloworld;
 
 import com.google.common.eventbus.Subscribe;
 import com.vaadin.annotations.Tag;
+import com.vaadin.flow.demo.helloworld.components.StyleUtil;
 import com.vaadin.flow.demo.helloworld.events.AddTodoEvent;
 import com.vaadin.flow.demo.helloworld.events.MarkAllAsCompleteToggledEvent;
 import com.vaadin.flow.demo.helloworld.events.TodoCompletedChangedEvent;
@@ -68,6 +69,7 @@ public class Footer extends HtmlContainer implements View {
 
     private void updateTodoCount() {
         todoCount.setCount(getActiveTodoCount());
+        StyleUtil.setVisible(this, todoModel.getTodos().size() > 0);
     }
 
     private int getActiveTodoCount() {

@@ -50,14 +50,6 @@ public class MainSection extends HtmlContainer {
         todoList.refresh();
     }
 
-    public void setVisible(boolean visible) {
-        if (visible) {
-            getElement().getStyle().remove("display");
-        } else {
-            getElement().getStyle().set("display", "none");
-        }
-    }
-
     public void setEventBus(EventBus eventBus) {
         this.eventBus = eventBus;
     }

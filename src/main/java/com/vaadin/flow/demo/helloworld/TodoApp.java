@@ -2,6 +2,7 @@ package com.vaadin.flow.demo.helloworld;
 
 import com.google.common.eventbus.Subscribe;
 import com.vaadin.annotations.Tag;
+import com.vaadin.flow.demo.helloworld.components.StyleUtil;
 import com.vaadin.flow.demo.helloworld.events.AddTodoEvent;
 import com.vaadin.flow.demo.helloworld.events.MarkAllAsCompleteToggledEvent;
 import com.vaadin.flow.demo.helloworld.events.TodoDestroyedEvent;
@@ -27,7 +28,7 @@ public class TodoApp extends HtmlContainer implements View{
         header.setEventBus(todoModel.getEventBus());
 
         mainSection = new MainSection(todoModel);
-        mainSection.setVisible(false);
+        StyleUtil.setVisible(mainSection, false);
         mainSection.setEventBus(todoModel.getEventBus());
 
         footer = new Footer(todoModel);
@@ -44,7 +45,7 @@ public class TodoApp extends HtmlContainer implements View{
     public void addTodo(AddTodoEvent event) {
         todoModel.addTodo(event.getTodo());
         mainSection.refreshTodoList();
-        mainSection.setVisible(true);
+        StyleUtil.setVisible(mainSection, true);
     }
 
     @Subscribe
@@ -57,6 +58,6 @@ public class TodoApp extends HtmlContainer implements View{
     public void destroyTodo(TodoDestroyedEvent event) {
         todoModel.removeTodo(event.getTodo());
         mainSection.refreshTodoList();
-        mainSection.setVisible(todoModel.getTodos().size() > 0);
+        StyleUtil.setVisible(mainSection, todoModel.getTodos().size() > 0);
     }
 }
