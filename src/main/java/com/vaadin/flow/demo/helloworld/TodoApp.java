@@ -1,34 +1,42 @@
 package com.vaadin.flow.demo.helloworld;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.google.common.eventbus.Subscribe;
 import com.vaadin.annotations.Tag;
-import com.vaadin.flow.demo.helloworld.beans.Todo;
+import com.vaadin.flow.demo.helloworld.events.AddTodoEvent;
+import com.vaadin.flow.demo.helloworld.model.TodoModel;
 import com.vaadin.flow.html.HtmlContainer;
 import com.vaadin.flow.router.View;
 
 @Tag("section")
-public class TodoApp extends HtmlContainer implements View, TodoHandler {
+public class TodoApp extends HtmlContainer implements View{
 
-    private List<Todo> todos = new ArrayList<>();
+    private final TodoModel todoModel;
 
-    private MainSection mainSection;
+    private final Header header;
+    private final MainSection mainSection;
+//    private final Footer footer; TODO
 
     public TodoApp() {
         setClassName("todoapp");
 
-        add(new Header(this));
+        todoModel = new TodoModel();
 
-        mainSection = new MainSection(todos);
+        header = new Header();
+        header.setEventBus(todoModel.getEventBus());
+
+        mainSection = new MainSection(todoModel.getTodos());
         mainSection.setVisible(false);
-        add(mainSection);
+
+        // Register event handler
+        todoModel.getEventBus().register(this);
+
+        add(header, mainSection);
     }
 
-    @Override
-    public void addTodo(Todo todo) {
-        todos.add(todo);
-        mainSection.refreshTodoList(todos);
+    @Subscribe
+    public void addTodo(AddTodoEvent event) {
+        todoModel.addTodo(event.getTodo());
+        mainSection.refreshTodoList(todoModel.getTodos());
         mainSection.setVisible(true);
     }
 }
