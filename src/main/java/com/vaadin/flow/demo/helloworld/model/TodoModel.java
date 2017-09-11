@@ -25,6 +25,10 @@ public class TodoModel {
         dataHandler.add(todo);
     }
 
+    public void removeTodo(Todo todo) {
+        dataHandler.remove(todo);
+    }
+
     public void markAllAsComplete(boolean complete) {
         todos.forEach(todo -> todo.setCompleted(complete));
     }
