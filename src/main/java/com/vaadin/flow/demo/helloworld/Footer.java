@@ -48,10 +48,39 @@ public class Footer extends HtmlContainer implements View {
         }
     }
 
+    @Tag(Tag.UL)
+    private static class Filter extends HtmlContainer {
+
+        private final HtmlContainer all;
+        private final HtmlContainer active;
+        private final HtmlContainer completed;
+
+        public Filter() {
+            setClassName("filters");
+
+            all = new HtmlContainer(Tag.A);
+            all.setText("All");
+            all.getElement().setAttribute("href", "/");
+
+            active = new HtmlContainer(Tag.A);
+            active.setText("Active");
+            active.getElement().setAttribute("href", "/active");
+
+            completed = new HtmlContainer(Tag.A);
+            completed.setText("Completed");
+            completed.getElement().setAttribute("href", "/completed");
+
+            add(new HtmlContainer(Tag.LI, all),
+                    new HtmlContainer(Tag.LI, active),
+                    new HtmlContainer(Tag.LI, completed));
+        }
+    }
+
     private TodoModel todoModel;
     private EventBus eventBus;
 
     private TodoCount todoCount;
+    private Filter filter;
     private NativeButton clearCompleted;
 
     public Footer(TodoModel todoModel) {
@@ -68,9 +97,11 @@ public class Footer extends HtmlContainer implements View {
             updateTodoCount();
         });
 
+        filter = new Filter();
+
         updateTodoCount();
 
-        add(todoCount, clearCompleted);
+        add(todoCount, filter, clearCompleted);
     }
 
     private void updateTodoCount() {
