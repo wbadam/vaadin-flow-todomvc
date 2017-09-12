@@ -11,6 +11,7 @@ import com.vaadin.flow.demo.helloworld.events.MarkAllAsCompleteToggledEvent;
 import com.vaadin.flow.demo.helloworld.events.TodoCompletedChangedEvent;
 import com.vaadin.flow.demo.helloworld.events.TodoDestroyedEvent;
 import com.vaadin.flow.demo.helloworld.model.TodoModel;
+import com.vaadin.flow.html.Anchor;
 import com.vaadin.flow.html.HtmlContainer;
 import com.vaadin.flow.html.NativeButton;
 import com.vaadin.flow.html.Span;
@@ -51,24 +52,16 @@ public class Footer extends HtmlContainer implements View {
     @Tag(Tag.UL)
     private static class Filter extends HtmlContainer {
 
-        private final HtmlContainer all;
-        private final HtmlContainer active;
-        private final HtmlContainer completed;
+        private final Anchor all;
+        private final Anchor active;
+        private final Anchor completed;
 
         public Filter() {
             setClassName("filters");
 
-            all = new HtmlContainer(Tag.A);
-            all.setText("All");
-            all.getElement().setAttribute("href", "/");
-
-            active = new HtmlContainer(Tag.A);
-            active.setText("Active");
-            active.getElement().setAttribute("href", "/active");
-
-            completed = new HtmlContainer(Tag.A);
-            completed.setText("Completed");
-            completed.getElement().setAttribute("href", "/completed");
+            all = new Anchor("/", "All");
+            active = new Anchor("/active", "Active");
+            completed = new Anchor("/completed", "Completed");
 
             add(new HtmlContainer(Tag.LI, all),
                     new HtmlContainer(Tag.LI, active),
