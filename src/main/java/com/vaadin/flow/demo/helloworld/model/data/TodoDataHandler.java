@@ -1,11 +1,11 @@
-package com.vaadin.flow.demo.helloworld.data;
+package com.vaadin.flow.demo.helloworld.model.data;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import com.vaadin.flow.demo.helloworld.beans.Todo;
+import com.vaadin.flow.demo.helloworld.model.data.beans.Todo;
 
 public class TodoDataHandler implements DataHandler<Todo> {
 

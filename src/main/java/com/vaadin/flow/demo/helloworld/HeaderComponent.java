@@ -2,20 +2,19 @@ package com.vaadin.flow.demo.helloworld;
 
 import com.google.common.eventbus.EventBus;
 import com.vaadin.annotations.Tag;
-import com.vaadin.flow.demo.helloworld.beans.Todo;
-import com.vaadin.flow.demo.helloworld.events.AddTodoEvent;
+import com.vaadin.flow.demo.helloworld.controller.events.AddTodoEvent;
+import com.vaadin.flow.demo.helloworld.view.HasEventBus;
 import com.vaadin.flow.html.H1;
 import com.vaadin.flow.html.HtmlContainer;
 import com.vaadin.flow.html.Input;
-import com.vaadin.flow.router.View;
 
 @Tag("header")
-public class Header extends HtmlContainer implements View {
+public class HeaderComponent extends HtmlContainer implements HasEventBus {
 
     private Input newTodo;
     private EventBus eventBus;
 
-    public Header() {
+    public HeaderComponent() {
         setClassName("header");
         add(new H1("todos"));
 
@@ -27,17 +26,23 @@ public class Header extends HtmlContainer implements View {
         newTodo.addChangeListener(event -> {
             String value = newTodo.getValue();
             if (value != null && value.trim().length() > 0) {
-                Todo todo = new Todo(value.trim());
+                String title = value.trim();
                 newTodo.setValue("");
 
-                eventBus.post(new AddTodoEvent(todo));
+                getTodoEventBus().post(new AddTodoEvent(title));
             }
         });
 
         add(newTodo);
     }
 
-    public void setEventBus(EventBus eventBus) {
+    @Override
+    public void setTodoEventBus(EventBus eventBus) {
         this.eventBus = eventBus;
+    }
+
+    @Override
+    public EventBus getTodoEventBus() {
+        return eventBus;
     }
 }

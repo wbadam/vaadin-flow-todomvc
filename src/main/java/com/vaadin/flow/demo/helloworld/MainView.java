@@ -16,6 +16,8 @@
 package com.vaadin.flow.demo.helloworld;
 
 import com.vaadin.annotations.StyleSheet;
+import com.vaadin.flow.demo.helloworld.controller.TodoApplication;
+import com.vaadin.flow.demo.helloworld.model.TodoModel;
 import com.vaadin.flow.html.Div;
 import com.vaadin.flow.router.View;
 import com.vaadin.ui.Composite;
@@ -25,7 +27,12 @@ import com.vaadin.ui.Composite;
 public class MainView extends Composite<Div> implements View {
 
     public MainView() {
-        getContent().add(new TodoApp());
+
+        TodoAppComponent todoAppView = new TodoAppComponent();
+        TodoApplication todoApp = new TodoApplication(new TodoModel(),
+                todoAppView);
+
+        getContent().add(todoAppView);
     }
 
 }

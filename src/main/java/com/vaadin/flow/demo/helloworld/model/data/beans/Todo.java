@@ -1,4 +1,4 @@
-package com.vaadin.flow.demo.helloworld.beans;
+package com.vaadin.flow.demo.helloworld.model.data.beans;
 
 public class Todo {
     private String id;

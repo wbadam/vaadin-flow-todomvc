@@ -5,14 +5,13 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.google.common.eventbus.EventBus;
-import com.vaadin.flow.demo.helloworld.beans.Todo;
-import com.vaadin.flow.demo.helloworld.data.TodoDataHandler;
+import com.vaadin.flow.demo.helloworld.model.data.beans.Todo;
+import com.vaadin.flow.demo.helloworld.model.data.TodoDataHandler;
 
 public class TodoModel {
 
     private final List<Todo> todos;
     private final TodoDataHandler dataHandler;
-    private final EventBus eventBus = new EventBus();
 
     public TodoModel() {
         dataHandler = new TodoDataHandler();
@@ -38,9 +37,5 @@ public class TodoModel {
 
     public void markAllAsComplete(boolean complete) {
         todos.forEach(todo -> todo.setCompleted(complete));
-    }
-
-    public EventBus getEventBus() {
-        return eventBus;
     }
 }

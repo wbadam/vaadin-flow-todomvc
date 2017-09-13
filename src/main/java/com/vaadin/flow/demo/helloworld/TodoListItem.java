@@ -2,11 +2,12 @@ package com.vaadin.flow.demo.helloworld;
 
 import com.google.common.eventbus.EventBus;
 import com.vaadin.annotations.Tag;
-import com.vaadin.flow.demo.helloworld.beans.Todo;
+import com.vaadin.flow.demo.helloworld.model.data.beans.Todo;
 import com.vaadin.flow.demo.helloworld.components.NativeCheckbox;
-import com.vaadin.flow.demo.helloworld.events.TodoCompletedChangedEvent;
-import com.vaadin.flow.demo.helloworld.events.TodoDestroyedEvent;
-import com.vaadin.flow.demo.helloworld.events.TodoEditedEvent;
+import com.vaadin.flow.demo.helloworld.controller.events.TodoCompletedChangedEvent;
+import com.vaadin.flow.demo.helloworld.controller.events.TodoDestroyedEvent;
+import com.vaadin.flow.demo.helloworld.controller.events.TodoEditedEvent;
+import com.vaadin.flow.demo.helloworld.view.HasEventBus;
 import com.vaadin.flow.html.Div;
 import com.vaadin.flow.html.HtmlContainer;
 import com.vaadin.flow.html.Input;
@@ -14,7 +15,7 @@ import com.vaadin.flow.html.Label;
 import com.vaadin.flow.html.NativeButton;
 
 @Tag(Tag.LI)
-public class TodoListItem extends HtmlContainer {
+public class TodoListItem extends HtmlContainer implements HasEventBus {
 
     private static String STYLE_NAME_COMPLETED = "completed";
     private static String STYLE_NAME_EDITING = "editing";
@@ -84,7 +85,7 @@ public class TodoListItem extends HtmlContainer {
                     todo.setText(value.trim());
                     view.setText(todo.getText());
                     disableEditing();
-                    eventBus.post(new TodoEditedEvent());
+                    getTodoEventBus().post(new TodoEditedEvent());
                 } else {
                     destroyTodo();
                 }
@@ -99,11 +100,20 @@ public class TodoListItem extends HtmlContainer {
         add(edit);
     }
 
+    Todo getTodo() {
+        return todo;
+    }
+
+    void setCompleted(boolean completed) {
+        todo.setCompleted(completed);
+        updateStyleName();
+    }
+
     private void toggleCompleted() {
         todo.setCompleted(!todo.isCompleted());
         updateStyleName();
 
-        eventBus.post(new TodoCompletedChangedEvent(todo));
+        getTodoEventBus().post(new TodoCompletedChangedEvent(todo));
     }
 
     private void enableEditing(String text) {
@@ -137,10 +147,16 @@ public class TodoListItem extends HtmlContainer {
     }
 
     private void destroyTodo() {
-        eventBus.post(new TodoDestroyedEvent(todo));
+        getTodoEventBus().post(new TodoDestroyedEvent(todo));
     }
 
-    public void setEventBus(EventBus eventBus) {
+    @Override
+    public void setTodoEventBus(EventBus eventBus) {
         this.eventBus = eventBus;
+    }
+
+    @Override
+    public EventBus getTodoEventBus() {
+        return eventBus;
     }
 }

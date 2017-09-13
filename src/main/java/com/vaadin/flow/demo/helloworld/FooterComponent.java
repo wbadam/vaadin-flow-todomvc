@@ -1,25 +1,18 @@
 package com.vaadin.flow.demo.helloworld;
 
 import com.google.common.eventbus.EventBus;
-import com.google.common.eventbus.Subscribe;
 import com.vaadin.annotations.Tag;
-import com.vaadin.flow.demo.helloworld.beans.Todo;
 import com.vaadin.flow.demo.helloworld.components.StyleUtil;
-import com.vaadin.flow.demo.helloworld.events.AddTodoEvent;
-import com.vaadin.flow.demo.helloworld.events.ClearCompletedEvent;
-import com.vaadin.flow.demo.helloworld.events.MarkAllAsCompleteToggledEvent;
-import com.vaadin.flow.demo.helloworld.events.TodoCompletedChangedEvent;
-import com.vaadin.flow.demo.helloworld.events.TodoDestroyedEvent;
-import com.vaadin.flow.demo.helloworld.model.TodoModel;
+import com.vaadin.flow.demo.helloworld.controller.events.ClearCompletedTodosEvent;
+import com.vaadin.flow.demo.helloworld.view.HasEventBus;
 import com.vaadin.flow.html.Anchor;
 import com.vaadin.flow.html.HtmlContainer;
 import com.vaadin.flow.html.NativeButton;
 import com.vaadin.flow.html.Span;
-import com.vaadin.flow.router.View;
 import com.vaadin.ui.Text;
 
 @Tag("footer")
-public class Footer extends HtmlContainer implements View {
+public class FooterComponent extends HtmlContainer implements HasEventBus {
 
     private static class TodoCount extends Span {
         private static final String COUNTER_TEXT_SINGULAR = " item left";
@@ -69,72 +62,41 @@ public class Footer extends HtmlContainer implements View {
         }
     }
 
-    private TodoModel todoModel;
     private EventBus eventBus;
 
     private TodoCount todoCount;
     private Filter filter;
     private NativeButton clearCompleted;
 
-    public Footer(TodoModel todoModel) {
+    public FooterComponent() {
         setClassName("footer");
-
-        this.todoModel = todoModel;
 
         todoCount = new TodoCount();
 
         clearCompleted = new NativeButton("Clear completed");
         clearCompleted.setClassName("clear-completed");
         clearCompleted.addClickListener(event -> {
-            eventBus.post(new ClearCompletedEvent());
-            updateTodoCount();
+            getTodoEventBus().post(new ClearCompletedTodosEvent());
         });
 
         filter = new Filter();
 
-        updateTodoCount();
-
         add(todoCount, filter, clearCompleted);
     }
 
-    private void updateTodoCount() {
-        todoCount.setCount(getActiveTodoCount());
-        StyleUtil.setVisible(this, todoModel.getTodos().size() > 0);
-
-        StyleUtil.setVisible(clearCompleted, getCompletedTodoCount() > 0);
+    void setTodoCount(int count, int activeCount) {
+        todoCount.setCount(activeCount);
+        StyleUtil.setVisible(this, count > 0);
+        StyleUtil.setVisible(clearCompleted, count - activeCount > 0);
     }
 
-    private int getActiveTodoCount() {
-        return (int) todoModel.getTodos().stream()
-                .filter(todo -> !todo.isCompleted()).count();
-    }
-
-    private int getCompletedTodoCount() {
-        return (int) todoModel.getTodos().stream().filter(Todo::isCompleted)
-                .count();
-    }
-
-    @Subscribe
-    public void todoAdded(AddTodoEvent event) {
-        updateTodoCount();
-    }
-
-    @Subscribe
-    public void todoRemoved(TodoDestroyedEvent event) {
-        updateTodoCount();
-    }
-
-    @Subscribe
-    public void todoCompleted(TodoCompletedChangedEvent event) {
-        updateTodoCount();
-    }
-
-    @Subscribe
-    public void markAllCompleteChanged(MarkAllAsCompleteToggledEvent event) {
-        updateTodoCount();
-    }
-
-    public void setEventBus(EventBus eventBus) {
+    @Override
+    public void setTodoEventBus(EventBus eventBus) {
         this.eventBus = eventBus;
+    }
+
+    @Override
+    public EventBus getTodoEventBus() {
+        return eventBus;
     }
 }

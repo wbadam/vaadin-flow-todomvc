@@ -1,4 +1,4 @@
-package com.vaadin.flow.demo.helloworld.data;
+package com.vaadin.flow.demo.helloworld.model.data;
 
 import java.util.List;
 
