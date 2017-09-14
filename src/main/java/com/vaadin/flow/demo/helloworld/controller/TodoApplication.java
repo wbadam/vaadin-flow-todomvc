@@ -2,6 +2,7 @@ package com.vaadin.flow.demo.helloworld.controller;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
+import com.vaadin.flow.demo.helloworld.controller.events.DataLoadedEvent;
 import com.vaadin.flow.demo.helloworld.model.data.beans.Todo;
 import com.vaadin.flow.demo.helloworld.controller.events.AddTodoEvent;
 import com.vaadin.flow.demo.helloworld.controller.events.ClearCompletedTodosEvent;
@@ -20,6 +21,8 @@ public class TodoApplication {
     public TodoApplication(TodoModel todoModel, TodoView todoView) {
         this.todoModel = todoModel;
         this.todoView = todoView;
+
+        todoModel.setTodoEventBus(eventBus);
 
         todoView.setTodos(todoModel.getTodos());
         todoView.setTodoEventBus(eventBus);
@@ -54,6 +57,11 @@ public class TodoApplication {
     @Subscribe
     public void destroyTodo(TodoDestroyedEvent event) {
         todoModel.removeTodo(event.getTodo());
+        todoView.setTodos(todoModel.getTodos());
+    }
+
+    @Subscribe
+    public void dataLoaded(DataLoadedEvent event) {
         todoView.setTodos(todoModel.getTodos());
     }
 }

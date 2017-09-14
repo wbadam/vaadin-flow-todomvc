@@ -1,12 +1,24 @@
 package com.vaadin.flow.demo.helloworld.model.data.beans;
 
+import java.util.UUID;
+
 public class Todo {
     private String id;
     private String text;
     private boolean completed;
 
     public Todo(String text) {
+        this(UUID.randomUUID().toString(), text, false);
+    }
+
+    public Todo(String id, String text, boolean completed) {
+        this.id = id;
         this.text = text;
+        this.completed = completed;
+    }
+
+    private Todo() {
+
     }
 
     public String getId() {

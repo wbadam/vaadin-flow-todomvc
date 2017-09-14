@@ -1,0 +1,36 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<dom-module id="data-store">
+
+    <script>
+        class DataStore extends Polymer.Element {
+            static get is() {
+                return 'data-store'
+            }
+
+            static get properties() {
+                return {
+                    storedData: {
+                        type: String,
+                        observer: '_storedDataChanged'
+                    },
+                    pageLoaded: {
+                        type: Boolean,
+                        value: false,
+                        observer: '_pageLoaded'
+                    }
+                };
+            }
+
+            _storedDataChanged() {
+                window.localStorage.setItem("todo-flow", this.storedData);
+            }
+
+            _pageLoaded() {
+                this.storedData = window.localStorage.getItem("todo-flow");
+                this.dispatchEvent(new CustomEvent('data-loaded'));
+            }
+        }
+        customElements.define(DataStore.is, DataStore);
+    </script>
+</dom-module>

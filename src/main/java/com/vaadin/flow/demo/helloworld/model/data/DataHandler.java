@@ -1,11 +1,15 @@
 package com.vaadin.flow.demo.helloworld.model.data;
 
+import java.util.Collection;
 import java.util.List;
 
-public interface DataHandler <T> {
+import com.vaadin.flow.demo.helloworld.view.HasEventBus;
 
-    void add(T todo);
-    void remove(T todo);
-    void setCompleted(T todo, boolean completed);
+public interface DataHandler <T> extends HasEventBus {
+
+    void add(T item);
+    void remove(T item);
+    void remove(Collection<T> items);
+    void setCompleted(T item, boolean completed);
     List<T> getAll();
 }
