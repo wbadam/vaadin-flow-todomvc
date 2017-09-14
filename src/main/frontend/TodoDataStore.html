@@ -23,11 +23,11 @@
             }
 
             _storedDataChanged() {
-                window.localStorage.setItem("todo-flow", this.storedData);
+                window.localStorage.setItem("todos-flow", this.storedData);
             }
 
             _pageLoaded() {
-                this.storedData = window.localStorage.getItem("todo-flow");
+                this.storedData = window.localStorage.getItem("todos-flow");
                 this.dispatchEvent(new CustomEvent('data-loaded'));
             }
         }
