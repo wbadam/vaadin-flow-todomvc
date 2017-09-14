@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.common.eventbus.EventBus;
 import com.vaadin.annotations.Tag;
+import com.vaadin.flow.todomvc.controller.TodoApplication.Filter;
 import com.vaadin.flow.todomvc.model.data.beans.Todo;
 import com.vaadin.flow.todomvc.components.StyleUtil;
 import com.vaadin.flow.todomvc.view.TodoView;
@@ -18,7 +19,8 @@ public class TodoAppComponent extends HtmlContainer implements TodoView {
 
     private EventBus eventBus;
 
-    private List<Todo> todos;
+    private int countAll;
+    private int countActive;
 
     public TodoAppComponent() {
         setClassName("todoapp");
@@ -39,13 +41,13 @@ public class TodoAppComponent extends HtmlContainer implements TodoView {
     }
 
     @Override
-    public void setTodos(List<Todo> todos) {
-        this.todos = todos;
-        mainSectionComponent.setTodos(todos);
+    public void setTodos(List<Todo> todos, int countAll, int countActive) {
+        this.countAll = countAll;
+        this.countActive = countActive;
+
+        mainSectionComponent.setTodos(todos, countAll, countActive);
         StyleUtil.setVisible(mainSectionComponent, todos.size() > 0);
-        footerComponent.setTodoCount(todos.size(),
-                (int) todos.stream().filter(todo -> !todo.isCompleted())
-                        .count());
+        footerComponent.setTodoCount(countAll, countActive);
     }
 
     @Override
@@ -56,8 +58,12 @@ public class TodoAppComponent extends HtmlContainer implements TodoView {
     @Override
     public void setCompleted(Todo todo, boolean completed) {
         mainSectionComponent.setCompleted(todo, completed);
-        footerComponent.setTodoCount(todos.size(),
-                (int) todos.stream().filter(t -> !t.isCompleted()).count());
+        footerComponent.setTodoCount(countAll, countActive);
+    }
+
+    @Override
+    public void setFilter(Filter filter) {
+        footerComponent.setFilter(filter);
     }
 
     @Override

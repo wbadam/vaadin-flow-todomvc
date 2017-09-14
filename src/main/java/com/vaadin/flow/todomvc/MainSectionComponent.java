@@ -19,7 +19,8 @@ public class MainSectionComponent extends HtmlContainer implements HasEventBus {
     private NativeCheckbox toggleAll;
     private TodoListComponent todoList;
 
-    private List<Todo> todos;
+    private int countAll;
+    private int countActive;
 
     public MainSectionComponent() {
         addClassName("main");
@@ -42,8 +43,9 @@ public class MainSectionComponent extends HtmlContainer implements HasEventBus {
         add(todoList);
     }
 
-    void setTodos(List<Todo> todos) {
-        this.todos = todos;
+    void setTodos(List<Todo> todos, int countAll, int countActive) {
+        this.countAll = countAll;
+        this.countActive = countActive;
 
         todoList.setTodos(todos);
 
@@ -57,7 +59,7 @@ public class MainSectionComponent extends HtmlContainer implements HasEventBus {
     }
 
     private boolean isIncompleteExists() {
-        return todos.stream().anyMatch(todo -> !todo.isCompleted());
+        return countActive > 0;
     }
 
     @Override

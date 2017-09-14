@@ -23,6 +23,10 @@ public class TodoModel implements HasEventBus {
         return todos;
     }
 
+    public List<Todo> getTodos(Predicate<Todo> filter) {
+        return todos.stream().filter(filter).collect(Collectors.toList());
+    }
+
     public void addTodo(Todo todo) {
         dataHandler.add(todo);
     }

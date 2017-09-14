@@ -16,7 +16,9 @@
 package com.vaadin.flow.todomvc;
 
 import com.vaadin.annotations.StyleSheet;
+import com.vaadin.flow.router.LocationChangeEvent;
 import com.vaadin.flow.todomvc.controller.TodoApplication;
+import com.vaadin.flow.todomvc.controller.TodoApplication.Filter;
 import com.vaadin.flow.todomvc.model.TodoModel;
 import com.vaadin.flow.todomvc.model.data.TodoDataStore;
 import com.vaadin.flow.html.Div;
@@ -27,6 +29,8 @@ import com.vaadin.ui.Composite;
 @StyleSheet("frontend://bower_components/todomvc-common/base.css")
 public class MainView extends Composite<Div> implements View {
 
+    private TodoApplication application;
+
     public MainView() {
 
         TodoDataStore dataStore = new TodoDataStore();
@@ -34,10 +38,30 @@ public class MainView extends Composite<Div> implements View {
         TodoAppComponent todoApp = new TodoAppComponent();
         todoApp.add(dataStore);
 
-        TodoApplication application = new TodoApplication(
-                new TodoModel(dataStore), todoApp);
+        application = new TodoApplication(new TodoModel(dataStore), todoApp);
 
         getContent().add(todoApp);
     }
 
+    @Override
+    public String getTitle(LocationChangeEvent locationChangeEvent) {
+        return "Flow TodoMVC";
+    }
+
+    @Override
+    public void onLocationChange(LocationChangeEvent locationChangeEvent) {
+        String filter = locationChangeEvent.getLocation().getFirstSegment();
+
+        switch (filter) {
+        case "active":
+            application.setFilter(Filter.ACTIVE);
+            break;
+        case "completed":
+            application.setFilter(Filter.COMPLETED);
+            break;
+        case "":
+        default:
+            application.setFilter(Filter.ALL);
+        }
+    }
 }

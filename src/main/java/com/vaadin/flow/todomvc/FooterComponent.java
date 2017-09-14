@@ -2,14 +2,15 @@ package com.vaadin.flow.todomvc;
 
 import com.google.common.eventbus.EventBus;
 import com.vaadin.annotations.Tag;
-import com.vaadin.flow.dom.Element;
-import com.vaadin.flow.dom.ElementFactory;
+import com.vaadin.flow.html.Anchor;
 import com.vaadin.flow.html.HtmlContainer;
 import com.vaadin.flow.html.NativeButton;
 import com.vaadin.flow.html.Span;
 import com.vaadin.flow.todomvc.components.StyleUtil;
+import com.vaadin.flow.todomvc.controller.TodoApplication.Filter;
 import com.vaadin.flow.todomvc.controller.events.ClearCompletedTodosEvent;
 import com.vaadin.flow.todomvc.view.HasEventBus;
+import com.vaadin.shared.ApplicationConstants;
 import com.vaadin.ui.Text;
 
 @Tag("footer")
@@ -43,32 +44,41 @@ public class FooterComponent extends HtmlContainer implements HasEventBus {
         }
     }
 
+    private static class RouterLink extends Anchor {
+        public RouterLink(String href, String text) {
+            super(href, text);
+            getElement()
+                    .setAttribute(ApplicationConstants.ROUTER_LINK_ATTRIBUTE,
+                            true);
+        }
+    }
+
     @Tag(Tag.UL)
-    private static class Filter extends HtmlContainer {
+    private static class FilterComponent extends HtmlContainer {
 
-        private final Element all;
-        private final Element active;
-        private final Element completed;
+        private static final String STYLE_NAME_SELECTED = "selected";
 
-        public Filter() {
+        private final RouterLink all;
+        private final RouterLink active;
+        private final RouterLink completed;
+
+        public FilterComponent() {
             setClassName("filters");
 
-            all = ElementFactory.createRouterLink("/", "All");
-            active = ElementFactory.createRouterLink("/active", "Active");
-            completed = ElementFactory
-                    .createRouterLink("/completed", "Completed");
+            all = new RouterLink("/", "All");
+            active = new RouterLink("/active", "Active");
+            completed = new RouterLink("/completed", "Completed");
 
-            getElement().appendChild(
-                    ElementFactory.createListItem().appendChild(all),
-                    ElementFactory.createListItem().appendChild(active),
-                    ElementFactory.createListItem().appendChild(completed));
+            add(new HtmlContainer(Tag.LI, all),
+                    new HtmlContainer(Tag.LI, active),
+                    new HtmlContainer(Tag.LI, completed));
         }
     }
 
     private EventBus eventBus;
 
     private TodoCount todoCount;
-    private Filter filter;
+    private FilterComponent filter;
     private NativeButton clearCompleted;
 
     public FooterComponent() {
@@ -82,7 +92,7 @@ public class FooterComponent extends HtmlContainer implements HasEventBus {
             getTodoEventBus().post(new ClearCompletedTodosEvent());
         });
 
-        filter = new Filter();
+        filter = new FilterComponent();
 
         add(todoCount, filter, clearCompleted);
     }
@@ -91,6 +101,35 @@ public class FooterComponent extends HtmlContainer implements HasEventBus {
         todoCount.setCount(activeCount);
         StyleUtil.setVisible(this, count > 0);
         StyleUtil.setVisible(clearCompleted, count - activeCount > 0);
+    }
+
+    void setFilter(Filter filter) {
+        switch (filter) {
+        case ALL:
+        default:
+            this.filter.all.addClassName(FilterComponent.STYLE_NAME_SELECTED);
+            this.filter.active
+                    .removeClassName(FilterComponent.STYLE_NAME_SELECTED);
+            this.filter.completed
+                    .removeClassName(FilterComponent.STYLE_NAME_SELECTED);
+            break;
+        case ACTIVE:
+            this.filter.all
+                    .removeClassName(FilterComponent.STYLE_NAME_SELECTED);
+            this.filter.active
+                    .addClassName(FilterComponent.STYLE_NAME_SELECTED);
+            this.filter.completed
+                    .removeClassName(FilterComponent.STYLE_NAME_SELECTED);
+            break;
+        case COMPLETED:
+            this.filter.all
+                    .removeClassName(FilterComponent.STYLE_NAME_SELECTED);
+            this.filter.active
+                    .removeClassName(FilterComponent.STYLE_NAME_SELECTED);
+            this.filter.completed
+                    .addClassName(FilterComponent.STYLE_NAME_SELECTED);
+            break;
+        }
     }
 
     @Override
