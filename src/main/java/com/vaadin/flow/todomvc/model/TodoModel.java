@@ -36,8 +36,12 @@ public class TodoModel implements HasEventBus {
                 .collect(Collectors.toList()));
     }
 
+    public void markAsCompleted(Todo todo, boolean complete) {
+        dataHandler.setCompleted(todo, complete);
+    }
+
     public void markAllAsComplete(boolean complete) {
-        todos.forEach(todo -> todo.setCompleted(complete));
+        dataHandler.setCompleted(dataHandler.getAll(), complete);
     }
 
     @Override

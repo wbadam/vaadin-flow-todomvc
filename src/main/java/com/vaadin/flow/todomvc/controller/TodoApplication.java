@@ -39,6 +39,8 @@ public class TodoApplication {
 
     @Subscribe
     public void todoCompletedChanged(TodoCompletedChangedEvent event) {
+        todoModel.markAsCompleted(event.getTodo(),
+                event.getTodo().isCompleted());
         todoView.setCompleted(event.getTodo(), event.getTodo().isCompleted());
     }
 

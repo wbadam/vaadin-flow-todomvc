@@ -11,5 +11,6 @@ public interface DataHandler <T> extends HasEventBus {
     void remove(T item);
     void remove(Collection<T> items);
     void setCompleted(T item, boolean completed);
+    void setCompleted(Collection<T> items, boolean completed);
     List<T> getAll();
 }

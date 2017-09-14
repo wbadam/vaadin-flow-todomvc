@@ -75,6 +75,12 @@ public class TodoDataStore extends PolymerTemplate<DataStoreModel> implements
     }
 
     @Override
+    public void setCompleted(Collection<Todo> todos, boolean completed) {
+        todos.forEach(todo -> todo.setCompleted(completed));
+        writeToStorage();
+    }
+
+    @Override
     public List<Todo> getAll() {
         return Collections.unmodifiableList(todos);
     }
