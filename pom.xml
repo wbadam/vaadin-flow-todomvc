@@ -4,8 +4,8 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.example</groupId>
     <artifactId>skeleton</artifactId>
-    <name>Flow Application Skeleton</name>
-    <version>0.1.21</version>
+    <name>Flow TodoMVC</name>
+    <version>0.1-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <properties>

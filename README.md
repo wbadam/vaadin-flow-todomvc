@@ -1,6 +1,4 @@
-# Skeleton Flow Project
-
-This project can be used as a starting point to create your own Flow application. 
+# Flow TodoMVC
 
 Run using
 ```mvn clean jetty:run```
