@@ -2,13 +2,14 @@ package com.vaadin.flow.todomvc;
 
 import com.google.common.eventbus.EventBus;
 import com.vaadin.annotations.Tag;
-import com.vaadin.flow.todomvc.components.StyleUtil;
-import com.vaadin.flow.todomvc.controller.events.ClearCompletedTodosEvent;
-import com.vaadin.flow.todomvc.view.HasEventBus;
-import com.vaadin.flow.html.Anchor;
+import com.vaadin.flow.dom.Element;
+import com.vaadin.flow.dom.ElementFactory;
 import com.vaadin.flow.html.HtmlContainer;
 import com.vaadin.flow.html.NativeButton;
 import com.vaadin.flow.html.Span;
+import com.vaadin.flow.todomvc.components.StyleUtil;
+import com.vaadin.flow.todomvc.controller.events.ClearCompletedTodosEvent;
+import com.vaadin.flow.todomvc.view.HasEventBus;
 import com.vaadin.ui.Text;
 
 @Tag("footer")
@@ -45,20 +46,22 @@ public class FooterComponent extends HtmlContainer implements HasEventBus {
     @Tag(Tag.UL)
     private static class Filter extends HtmlContainer {
 
-        private final Anchor all;
-        private final Anchor active;
-        private final Anchor completed;
+        private final Element all;
+        private final Element active;
+        private final Element completed;
 
         public Filter() {
             setClassName("filters");
 
-            all = new Anchor("/", "All");
-            active = new Anchor("/active", "Active");
-            completed = new Anchor("/completed", "Completed");
+            all = ElementFactory.createRouterLink("/", "All");
+            active = ElementFactory.createRouterLink("/active", "Active");
+            completed = ElementFactory
+                    .createRouterLink("/completed", "Completed");
 
-            add(new HtmlContainer(Tag.LI, all),
-                    new HtmlContainer(Tag.LI, active),
-                    new HtmlContainer(Tag.LI, completed));
+            getElement().appendChild(
+                    ElementFactory.createListItem().appendChild(all),
+                    ElementFactory.createListItem().appendChild(active),
+                    ElementFactory.createListItem().appendChild(completed));
         }
     }
 
